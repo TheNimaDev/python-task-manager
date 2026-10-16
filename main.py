@@ -74,26 +74,39 @@ def menu():
     return result
 
 
+def input_creator(input_title):
+    result = input(input_title)
+
+    if not result.strip():
+        print("Input cannot be empty.")
+        return None
+
+    return result
+
+
 tasks = load_tasks()
 while True:
     choice = menu()
     if choice == "1":
-        new_task = input("Write your new task: ")
-        add_task(new_task)
-        save_tasks()
+        new_task = input_creator("Write your new task: ")
+        if new_task:
+            add_task(new_task)
+            save_tasks()
     elif choice == "2":
         show_tasks()
     elif choice == "3":
-        task_id = input("Write your task id: ")
-        task_title = input("Write your task title: ")
-        result = update_task(task_id, task_title)
-        if result:
-            save_tasks()
+        task_id = input_creator("Write your task id: ")
+        task_title = input_creator("Write your task title: ")
+        if task_id and task_title:
+            result = update_task(task_id, task_title)
+            if result:
+                save_tasks()
     elif choice == "4":
-        task_id = input("Write your task id: ")
-        result = delete_task(task_id)
-        if result:
-            save_tasks()
+        task_id = input_creator("Write your task id: ")
+        if task_id:
+            result = delete_task(task_id)
+            if result:
+                save_tasks()
     elif choice == "5":
         break
     else:
