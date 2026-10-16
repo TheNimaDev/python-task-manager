@@ -2,9 +2,12 @@ tasks = []
 
 
 def add_task(task):
-    task_count = len(tasks)
+    if tasks:
+        task_id = tasks[-1]["id"]+1
+    else:
+        task_id = 1
     tasks.append({
-        "id": task_count + 1,
+        "id": task_id,
         "title": task
     })
 
