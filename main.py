@@ -17,7 +17,23 @@ def show_tasks():
             print(f"{task['id']} : {task['title']}")
 
 
-new_task = input("Write your new task: ")
+def menu():
+    print("""--- Task Manager ---
+    1. Add Task
+    2. Show Tasks
+    3. Exit""")
+    result = input("=> ")
+    return result
 
-add_task(new_task)
-show_tasks()
+
+while True:
+    choice = menu()
+    if choice == "1":
+        new_task = input("Write your new task: ")
+        add_task(new_task)
+    elif choice == "2":
+        show_tasks()
+    elif choice == "3":
+        break
+    else:
+        print("Invalid option. Please try again.")
