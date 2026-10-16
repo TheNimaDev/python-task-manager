@@ -30,6 +30,16 @@ def add_task(task):
     })
 
 
+def update_task(task_id, task_title):
+    for task in tasks:
+        if str(task["id"]) == str(task_id):
+            task["title"] = task_title
+            return True
+
+    print("Task not found.")
+    return False
+
+
 def show_tasks():
     if not tasks:
         print("No tasks found.")
@@ -57,8 +67,9 @@ def menu():
     print("""--- Task Manager ---
     1. Add Task
     2. Show Tasks
-    3. Delete Task
-    4. Exit""")
+    3. Update Task
+    4. Delete Task
+    5. Exit""")
     result = input("=> ")
     return result
 
@@ -74,10 +85,16 @@ while True:
         show_tasks()
     elif choice == "3":
         task_id = input("Write your task id: ")
-        result = delete_task(task_id)
+        task_title = input("Write your task title: ")
+        result = update_task(task_id, task_title)
         if result:
             save_tasks()
     elif choice == "4":
+        task_id = input("Write your task id: ")
+        result = delete_task(task_id)
+        if result:
+            save_tasks()
+    elif choice == "5":
         break
     else:
         print("Invalid option. Please try again.")
