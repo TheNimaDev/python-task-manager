@@ -1,4 +1,22 @@
+import json
+from pathlib import Path
 tasks = []
+
+
+def load_tasks():
+    tasks_file_path = Path("tasks.json")
+    if not tasks_file_path.exists():
+        tasks_file_path.write_text("[]", encoding="utf-8")
+
+    with open(tasks_file_path, "r", encoding="utf-8") as file:
+        tasks = json.load(file)
+    return tasks
+
+
+def save_tasks():
+    tasks_file_path = Path("tasks.json")
+    with open(tasks_file_path, "w", encoding="utf-8") as file:
+        json.dump(tasks, file, indent=4)
 
 
 def add_task(task):
@@ -29,8 +47,10 @@ def delete_task(task_id):
     if len(new_tasks) != len(tasks):
         tasks[:] = new_tasks
         print("Task deleted successfully.")
+        return True
     else:
         print("Task not found.")
+        return False
 
 
 def menu():
@@ -43,16 +63,20 @@ def menu():
     return result
 
 
+tasks = load_tasks()
 while True:
     choice = menu()
     if choice == "1":
         new_task = input("Write your new task: ")
         add_task(new_task)
+        save_tasks()
     elif choice == "2":
         show_tasks()
     elif choice == "3":
         task_id = input("Write your task id: ")
-        delete_task(task_id)
+        result = delete_task(task_id)
+        if result:
+            save_tasks()
     elif choice == "4":
         break
     else:
