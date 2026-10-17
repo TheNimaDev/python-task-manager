@@ -3,8 +3,8 @@ from pathlib import Path
 tasks = []
 
 
-def load_tasks():
-    tasks_file_path = Path("tasks.json")
+def load_tasks(file_path=None):
+    tasks_file_path = Path(file_path) if file_path else Path("tasks.json")
 
     if not tasks_file_path.exists():
         tasks_file_path.write_text("[]", encoding="utf-8")
