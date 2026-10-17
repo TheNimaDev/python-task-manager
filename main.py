@@ -26,7 +26,8 @@ def add_task(task):
         task_id = 1
     tasks.append({
         "id": task_id,
-        "title": task
+        "title": task,
+        "completed": False
     })
 
 
@@ -45,7 +46,18 @@ def show_tasks():
         print("No tasks found.")
     else:
         for task in tasks:
-            print(f"{task['id']} : {task['title']}")
+            status = "Completed" if task.get("completed", False) else "Pending"
+            print(f"{task['id']} : {task['title']} - {status}")
+
+
+def change_completed(task_id):
+    for task in tasks:
+        if str(task["id"]) == str(task_id):
+            task["completed"] = not task["completed"]
+            return True
+
+    print("Task not found.")
+    return False
 
 
 def delete_task(task_id):
@@ -68,8 +80,9 @@ def menu():
     1. Add Task
     2. Show Tasks
     3. Update Task
-    4. Delete Task
-    5. Exit""")
+    4. Mark as completed
+    5. Delete Task
+    6. Exit""")
     result = input("=> ")
     return result
 
@@ -104,10 +117,16 @@ while True:
     elif choice == "4":
         task_id = input_creator("Write your task id: ")
         if task_id:
-            result = delete_task(task_id)
+            result = change_completed(task_id)
             if result:
                 save_tasks()
     elif choice == "5":
+        task_id = input_creator("Write your task id: ")
+        if task_id:
+            result = delete_task(task_id)
+            if result:
+                save_tasks()
+    elif choice == "6":
         break
     else:
         print("Invalid option. Please try again.")
