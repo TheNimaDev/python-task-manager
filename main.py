@@ -11,9 +11,42 @@ def load_tasks():
     try:
         with open(tasks_file_path, "r", encoding="utf-8") as file:
             tasks = json.load(file)
+        if not isinstance(tasks, list):
+            raise ValueError()
+
+        if any(not isinstance(task, dict) for task in tasks):
+            raise ValueError()
+
+        required_keys = {"id", "title", "completed"}
+        if any(not required_keys.issubset(task) for task in tasks):
+            raise ValueError()
+
+        if any(
+            not (
+                type(task["id"]) is int and
+                type(task["title"]) is str and
+                type(task["completed"]) is bool
+            )
+            for task in tasks
+        ):
+            raise ValueError()
+
+        if any(
+            not (
+                task["title"].strip() and
+                task["id"] > 0
+            )
+            for task in tasks
+        ):
+            raise ValueError()
+
+        tasks_set = {task["id"] for task in tasks}
+        if len(tasks_set) != len(tasks):
+            raise ValueError()
+
         return tasks
-    except json.JSONDecodeError:
-        print("Invalid JSON in tasks.json. Starting with an empty task list.")
+    except (json.JSONDecodeError, ValueError):
+        print("Invalid tasks data in tasks.json . Starting with an empty task list.")
         return []
 
 
