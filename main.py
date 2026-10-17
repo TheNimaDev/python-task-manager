@@ -8,9 +8,13 @@ def load_tasks():
     if not tasks_file_path.exists():
         tasks_file_path.write_text("[]", encoding="utf-8")
 
-    with open(tasks_file_path, "r", encoding="utf-8") as file:
-        tasks = json.load(file)
-    return tasks
+    try:
+        with open(tasks_file_path, "r", encoding="utf-8") as file:
+            tasks = json.load(file)
+        return tasks
+    except json.JSONDecodeError:
+        print("Invalid JSON in tasks.json. Starting with an empty task list.")
+        return []
 
 
 def save_tasks():
