@@ -87,11 +87,21 @@ def menu():
     return result
 
 
-def input_creator(input_title):
+def input_creator(input_title, input_type=str):
     result = input(input_title)
 
     if not result.strip():
         print("Input cannot be empty.")
+        return None
+
+    try:
+        result = input_type(result)
+    except ValueError:
+        print(f"Invalid input. Please enter a valid {input_type.__name__}.")
+        return None
+
+    if input_type is int and result <= 0:
+        print("ID must be a positive integer.")
         return None
 
     return result
@@ -108,20 +118,20 @@ while True:
     elif choice == "2":
         show_tasks()
     elif choice == "3":
-        task_id = input_creator("Write your task id: ")
+        task_id = input_creator("Write your task id: ", int)
         task_title = input_creator("Write your task title: ")
         if task_id and task_title:
             result = update_task(task_id, task_title)
             if result:
                 save_tasks()
     elif choice == "4":
-        task_id = input_creator("Write your task id: ")
+        task_id = input_creator("Write your task id: ", int)
         if task_id:
             result = change_completed(task_id)
             if result:
                 save_tasks()
     elif choice == "5":
-        task_id = input_creator("Write your task id: ")
+        task_id = input_creator("Write your task id: ", int)
         if task_id:
             result = delete_task(task_id)
             if result:
